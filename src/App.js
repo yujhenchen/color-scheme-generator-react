@@ -56,8 +56,8 @@ export default function App() {
     setSelectColor(color);
   }
 
-  function onClickColorCard(color) {
-    console.log(color);
+  async function onClickColorCard(color) {
+    await navigator.clipboard.writeText(color);
   }
 
   return (

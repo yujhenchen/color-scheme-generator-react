@@ -8,17 +8,21 @@ import DropDown from "./DropDown";
 import Button from "./Button";
 
 export default function App() {
-  const [selectedColor, setSelectColor] = useState("#000000");
+  const colors = [];
+  const colorButtonText = "Get color scheme";
+  const defaultColor = "#000000";
+  const colorCardCount = 5;
+  const colorSchemeURL =
+    "https://www.thecolorapi.com/scheme?hex=hexValue&count=resultCount";
+
+  const [selectedColor, setSelectColor] = useState(defaultColor);
   function onGetColor() {
-    fetch(
-      `https://www.thecolorapi.com/scheme?hex=${selectedColor.replace(
-        /[^a-zA-Z0-9 ]/g,
-        ""
-      )}&count=5`,
-      {
-        method: "GET",
-      }
-    )
+    const url = colorSchemeURL
+      .replace("hexValue", selectedColor.replace(/[^a-zA-Z0-9 ]/g, ""))
+      .replace("resultCount", colorCardCount);
+    fetch(url, {
+      method: "GET",
+    })
       .then((res) => res.json())
       .then((data) => console.log(data));
   }
@@ -30,9 +34,6 @@ export default function App() {
   function onClickColorCard(color) {
     console.log(color);
   }
-
-  const colors = [];
-  const colorButtonText = "Get color scheme";
 
   return (
     <>

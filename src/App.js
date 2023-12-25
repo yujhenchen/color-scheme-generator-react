@@ -42,13 +42,13 @@ export default function App() {
   }
 
   return (
-    <>
+    <main className="flex flex-col min-h-screen w-full">
       <Header>
         <ColorPicker onChangeColor={onChangeColor} color={selectedColor} />
         <DropDown options={[]} />
         <Button text={colorButtonText} onClick={onGetColor} />
       </Header>
-      <main className="color-cards-container">
+      <section className="color-cards-container grow flex w-full">
         {colors.map((color) => (
           <ColorCard
             key={color.colorName}
@@ -56,7 +56,7 @@ export default function App() {
             onClick={onClickColorCard}
           />
         ))}
-      </main>
-    </>
+      </section>
+    </main>
   );
 }

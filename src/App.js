@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import "./styles.css";
 import Header from "./components/Header";
 import ColorCard from "./components/ColorCard";
 import ColorPicker from "./components/ColorPicker";
 import DropDown from "./components/DropDown";
 import Button from "./components/Button";
+import Toast from "./components/Toast";
+import debounce from "./helper";
 
 export default function App() {
   const colorButtonText = "Get color scheme";
@@ -28,6 +30,8 @@ export default function App() {
   const [selectedSchemeMode, setSelectedSchemeMode] = useState(
     colorSchemeModes.length > 0 ? colorSchemeModes[0].value : ""
   );
+  const [showToast, setShowToast] = useState(false);
+  const [clickedColor, setClickedColor] = useState("");
 
   function onSelect(value) {
     setSelectedSchemeMode(value);
@@ -56,30 +60,44 @@ export default function App() {
     setSelectColor(color);
   }
 
+  const hideToast = useCallback(
+    debounce(() => setShowToast(false), 2000),
+    []
+  );
+
   async function onClickColorCard(color) {
-    await navigator.clipboard.writeText(color);
+    setShowToast(true);
+    hideToast();
+    navigator.clipboard.writeText(color);
+    setClickedColor(color);
   }
 
   return (
-    <main className="flex flex-col min-h-screen w-full">
-      <Header>
-        <ColorPicker onChangeColor={onChangeColor} color={selectedColor} />
-        <DropDown
-          options={colorSchemeModes}
-          onSelect={onSelect}
-          selectedOption={selectedSchemeMode}
-        />
-        <Button text={colorButtonText} onClick={onGetColor} />
-      </Header>
-      <section className="color-cards-container grow flex w-full">
-        {colors.map((color) => (
-          <ColorCard
-            key={color.colorName}
-            {...color}
-            onClick={onClickColorCard}
+    <>
+      <main className="flex flex-col min-h-screen w-full">
+        <Header>
+          <ColorPicker onChangeColor={onChangeColor} color={selectedColor} />
+          <DropDown
+            options={colorSchemeModes}
+            onSelect={onSelect}
+            selectedOption={selectedSchemeMode}
           />
-        ))}
-      </section>
-    </main>
+          <Button text={colorButtonText} onClick={onGetColor} />
+        </Header>
+        <section className="color-cards-container grow flex w-full">
+          {colors.map((color) => (
+            <ColorCard
+              key={color.colorName}
+              {...color}
+              onClick={onClickColorCard}
+            />
+          ))}
+        </section>
+      </main>
+
+      {showToast && (
+        <Toast text={`Copied color ${clickedColor} to clipboard!`} />
+      )}
+    </>
   );
 }

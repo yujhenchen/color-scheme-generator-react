@@ -1,14 +1,12 @@
 import { useState } from "react";
 import "./styles.css";
 import Header from "./Header";
-import CardContainer from "./CardContainer";
 import ColorCard from "./ColorCard";
 import ColorPicker from "./ColorPicker";
 import DropDown from "./DropDown";
 import Button from "./Button";
 
 export default function App() {
-  const colors = [];
   const colorButtonText = "Get color scheme";
   const defaultColor = "#000000";
   const colorCardCount = 5;
@@ -16,6 +14,7 @@ export default function App() {
     "https://www.thecolorapi.com/scheme?hex=hexValue&count=resultCount";
 
   const [selectedColor, setSelectColor] = useState(defaultColor);
+  const [colors, setColors] = useState([]);
   function onGetColor() {
     const url = colorSchemeURL
       .replace("hexValue", selectedColor.replace(/[^a-zA-Z0-9 ]/g, ""))
@@ -24,7 +23,14 @@ export default function App() {
       method: "GET",
     })
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) =>
+        setColors(
+          data.colors.map((color) => ({
+            colorName: color.hex.value,
+            colorValue: color.rgb.value,
+          }))
+        )
+      );
   }
 
   function onChangeColor(color) {
@@ -42,11 +48,13 @@ export default function App() {
         <DropDown options={[]} />
         <Button text={colorButtonText} onClick={onGetColor} />
       </Header>
-      <main>
-        {colors.map((color, index) => (
-          <CardContainer key={index}>
-            <ColorCard {...color} onClick={onClickColorCard} />
-          </CardContainer>
+      <main className="color-cards-container">
+        {colors.map((color) => (
+          <ColorCard
+            key={color.colorName}
+            {...color}
+            onClick={onClickColorCard}
+          />
         ))}
       </main>
     </>

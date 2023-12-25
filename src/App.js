@@ -12,6 +12,16 @@ export default function App() {
   const colorCardCount = 5;
   const colorSchemeURL =
     "https://www.thecolorapi.com/scheme?hex=hexValue&count=resultCount";
+  const colorSchemeModes = [
+    { value: "monochrome", text: "Monochrome" },
+    { value: "monochrome-dark", text: "Monochrome Dark" },
+    { value: "monochrome-light", text: "Monochrome Light" },
+    { value: "analogic", text: "Analogic" },
+    { value: "complement", text: "Complement" },
+    { value: "analogic-complement", text: "Analogic Complement" },
+    { value: "triad ", text: "Triad" },
+    { value: "quad ", text: "Quad" },
+  ];
 
   const [selectedColor, setSelectColor] = useState(defaultColor);
   const [colors, setColors] = useState([]);
@@ -45,7 +55,7 @@ export default function App() {
     <main className="flex flex-col min-h-screen w-full">
       <Header>
         <ColorPicker onChangeColor={onChangeColor} color={selectedColor} />
-        <DropDown options={[]} />
+        <DropDown options={colorSchemeModes} />
         <Button text={colorButtonText} onClick={onGetColor} />
       </Header>
       <section className="color-cards-container grow flex w-full">

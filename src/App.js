@@ -11,7 +11,7 @@ export default function App() {
   const defaultColor = "#000000";
   const colorCardCount = 5;
   const colorSchemeURL =
-    "https://www.thecolorapi.com/scheme?hex=hexValue&count=resultCount";
+    "https://www.thecolorapi.com/scheme?hex=hexValue&mode=colorSchemeMode&count=resultCount";
   const colorSchemeModes = [
     { value: "monochrome", text: "Monochrome" },
     { value: "monochrome-dark", text: "Monochrome Dark" },
@@ -19,15 +19,24 @@ export default function App() {
     { value: "analogic", text: "Analogic" },
     { value: "complement", text: "Complement" },
     { value: "analogic-complement", text: "Analogic Complement" },
-    { value: "triad ", text: "Triad" },
-    { value: "quad ", text: "Quad" },
+    { value: "triad", text: "Triad" },
+    { value: "quad", text: "Quad" },
   ];
 
   const [selectedColor, setSelectColor] = useState(defaultColor);
   const [colors, setColors] = useState([]);
+  const [selectedSchemeMode, setSelectedSchemeMode] = useState(
+    colorSchemeModes.length > 0 ? colorSchemeModes[0].value : ""
+  );
+
+  function onSelect(value) {
+    setSelectedSchemeMode(value);
+  }
+
   function onGetColor() {
     const url = colorSchemeURL
       .replace("hexValue", selectedColor.replace(/[^a-zA-Z0-9 ]/g, ""))
+      .replace("colorSchemeMode", selectedSchemeMode)
       .replace("resultCount", colorCardCount);
     fetch(url, {
       method: "GET",
@@ -37,7 +46,7 @@ export default function App() {
         setColors(
           data.colors.map((color) => ({
             colorName: color.hex.value,
-            colorValue: color.rgb.value,
+            colorValue: color.hex.value,
           }))
         )
       );
@@ -55,7 +64,11 @@ export default function App() {
     <main className="flex flex-col min-h-screen w-full">
       <Header>
         <ColorPicker onChangeColor={onChangeColor} color={selectedColor} />
-        <DropDown options={colorSchemeModes} />
+        <DropDown
+          options={colorSchemeModes}
+          onSelect={onSelect}
+          selectedOption={selectedSchemeMode}
+        />
         <Button text={colorButtonText} onClick={onGetColor} />
       </Header>
       <section className="color-cards-container grow flex w-full">

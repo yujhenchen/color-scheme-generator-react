@@ -1,10 +1,10 @@
 import { useState } from "react";
 import "./styles.css";
-import Header from "./Header";
-import ColorCard from "./ColorCard";
-import ColorPicker from "./ColorPicker";
-import DropDown from "./DropDown";
-import Button from "./Button";
+import Header from "./components/Header";
+import ColorCard from "./components/ColorCard";
+import ColorPicker from "./components/ColorPicker";
+import DropDown from "./components/DropDown";
+import Button from "./components/Button";
 
 export default function App() {
   const colorButtonText = "Get color scheme";

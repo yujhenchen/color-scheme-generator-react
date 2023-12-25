@@ -7,28 +7,13 @@ import DropDown from "./components/DropDown";
 import Button from "./components/Button";
 import Toast from "./components/Toast";
 import debounce from "./helper";
+import appData from "./constants";
 
 export default function App() {
-  const colorButtonText = "Get color scheme";
-  const defaultColor = "#000000";
-  const colorCardCount = 5;
-  const colorSchemeURL =
-    "https://www.thecolorapi.com/scheme?hex=hexValue&mode=colorSchemeMode&count=resultCount";
-  const colorSchemeModes = [
-    { value: "monochrome", text: "Monochrome" },
-    { value: "monochrome-dark", text: "Monochrome Dark" },
-    { value: "monochrome-light", text: "Monochrome Light" },
-    { value: "analogic", text: "Analogic" },
-    { value: "complement", text: "Complement" },
-    { value: "analogic-complement", text: "Analogic Complement" },
-    { value: "triad", text: "Triad" },
-    { value: "quad", text: "Quad" },
-  ];
-
-  const [selectedColor, setSelectColor] = useState(defaultColor);
+  const [selectedColor, setSelectColor] = useState(appData.defaultColor);
   const [colors, setColors] = useState([]);
   const [selectedSchemeMode, setSelectedSchemeMode] = useState(
-    colorSchemeModes.length > 0 ? colorSchemeModes[0].value : ""
+    appData.colorSchemeModes.length > 0 ? appData.colorSchemeModes[0].value : ""
   );
   const [showToast, setShowToast] = useState(false);
   const [clickedColor, setClickedColor] = useState("");
@@ -38,10 +23,10 @@ export default function App() {
   }
 
   function onGetColor() {
-    const url = colorSchemeURL
+    const url = appData.colorSchemeURL
       .replace("hexValue", selectedColor.replace(/[^a-zA-Z0-9 ]/g, ""))
       .replace("colorSchemeMode", selectedSchemeMode)
-      .replace("resultCount", colorCardCount);
+      .replace("resultCount", appData.colorCardCount);
     fetch(url, {
       method: "GET",
     })
@@ -78,11 +63,11 @@ export default function App() {
         <Header>
           <ColorPicker onChangeColor={onChangeColor} color={selectedColor} />
           <DropDown
-            options={colorSchemeModes}
+            options={appData.colorSchemeModes}
             onSelect={onSelect}
             selectedOption={selectedSchemeMode}
           />
-          <Button text={colorButtonText} onClick={onGetColor} />
+          <Button text={appData.colorButtonText} onClick={onGetColor} />
         </Header>
         <section className="color-cards-container grow flex w-full">
           {colors.map((color) => (

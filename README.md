@@ -6,6 +6,7 @@
 # How to display check mark in the selected <option> in <select>?
 
 # Vertical stretch flex item in flex direct row parent?
+set self-stretch to the flex item
 
 # Scale to increase the size of flex item without changing the layout of the parent?
 

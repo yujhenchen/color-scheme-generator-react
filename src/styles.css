@@ -8,3 +8,12 @@
   box-sizing: border-box;
   user-select: none;
 }
+/* 
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+} */
